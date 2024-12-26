@@ -22,5 +22,5 @@ public class Product {
           private String category;
           private boolean featured;
 
-          private String createdBy; // Added field to store the user who created the product
+          private String createdBy;
 }
