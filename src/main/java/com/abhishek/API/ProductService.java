@@ -13,8 +13,7 @@ public class ProductService {
           @Autowired
           private ProductRepository productRepository;
 
-          public ResponseEntity<?> addProduct(Product product, String username) {
-                    product.setCreatedBy(username);
+          public ResponseEntity<?> addProduct(Product product) {
                     productRepository.save(product);
                     return new ResponseEntity<>("Product added successfully", HttpStatus.CREATED);
           }

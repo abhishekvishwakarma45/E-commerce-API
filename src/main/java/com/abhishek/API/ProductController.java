@@ -22,37 +22,17 @@ public class ProductController {
           private ProductService productService;
 
           @PostMapping("/add")
-          public ResponseEntity<?> addProduct(@RequestBody Product product, Principal principal) {
-                    if (principal == null || principal.getName() == null) {
-                              return ResponseEntity.status(403).body("User is not authenticated");
-
-                    }
-
-                    String username = principal.getName();
-                    System.out.println("username:" + username);
-
-                    return productService.addProduct(product, username);
+          public ResponseEntity<?> addProduct(@RequestBody Product product) {
+                    return productService.addProduct(product);
           }
 
           @GetMapping("/get")
-          public ResponseEntity<List<Product>> GetProducts(Principal principal) {
-                    if (principal == null || principal.getName() == null) {
-                              System.err.println("user is not authenticated");
-                    }
-
-                    String username = principal.getName();
-                    System.out.println("user :" + username);
+          public ResponseEntity<List<Product>> GetProducts() {
                     return new ResponseEntity<>(productService.getAllProducts(), HttpStatus.FOUND);
           }
 
           @GetMapping("/get/{id}")
-          public ResponseEntity<Product> GetProductById(@PathVariable String id, Principal principal) {
-                    if (principal == null || principal.getName() == null) {
-                              System.err.println("user is not authenticated");
-                    }
-
-                    String username = principal.getName();
-                    System.out.println("user :" + username);
+          public ResponseEntity<Product> GetProductById(@PathVariable String id) {
                     return new ResponseEntity<>(productService.GetProductById(id), HttpStatus.FOUND);
           }
 }
