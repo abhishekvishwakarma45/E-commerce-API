@@ -19,8 +19,8 @@ public class Product {
           private List<String> image;
           @Column(name = "description", length = 1000)
           private String description;
+          private String company;
           private String category;
           private boolean featured;
 
-          private String createdBy;
 }
