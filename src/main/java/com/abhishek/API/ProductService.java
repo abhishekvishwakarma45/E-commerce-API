@@ -1,7 +1,6 @@
 package com.abhishek.API;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,15 +14,18 @@ public class ProductService {
 
           public ResponseEntity<?> addProduct(Product product) {
                     productRepository.save(product);
-                    return new ResponseEntity<>("Product added successfully", HttpStatus.CREATED);
+                    return ResponseEntity.status(HttpStatus.CREATED).body("Product added successfully");
           }
 
           public List<Product> getAllProducts() {
-                    List<Product> allProducts = productRepository.findAll();
-                    return allProducts;
+                    return productRepository.findAll();
           }
 
-          public Product GetProductById(String id) {
-                    return productRepository.findById(id).get();
+          public Product getProductById(String id) {
+                    return productRepository.findById(id).orElse(null);
+          }
+
+          public void deleteProductById(String id) {
+                    productRepository.deleteById(id);
           }
 }

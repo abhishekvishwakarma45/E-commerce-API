@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+
 @Configuration
 public class Config {
 
@@ -22,4 +25,15 @@ public class Config {
                               }
                     };
           }
+
+          @Bean
+          Cloudinary getCloudinary() {
+                    Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
+                                        "cloud_name", "dqktbs8zx",
+                                        "api_key", "682372517532291",
+                                        "api_secret", "JaWEZt2CPRPCEl538TTYVGpSFHI",
+                                        "secure", true));
+                    return cloudinary;
+          }
+
 }
