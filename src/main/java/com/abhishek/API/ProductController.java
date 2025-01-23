@@ -28,7 +28,7 @@ public class ProductController {
           private ProductService productService;
 
           @Autowired
-          private Cloudinary getCloudinary;
+          private Cloudinary cloudinary;
 
           @PostMapping("/add")
           public ResponseEntity<?> addProduct(
@@ -45,7 +45,8 @@ public class ProductController {
 
                               List<String> imageUrls = new ArrayList<>();
                               for (MultipartFile image : images) {
-                                        Map uploadResult = getCloudinary.uploader().upload(image.getBytes(),
+
+                                        Map uploadResult = cloudinary.uploader().upload(image.getBytes(),
                                                             ObjectUtils.emptyMap());
                                         imageUrls.add(uploadResult.get("url").toString());
                               }
