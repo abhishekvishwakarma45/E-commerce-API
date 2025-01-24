@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +25,9 @@ import com.cloudinary.utils.ObjectUtils;
 @RestController
 @RequestMapping("/product")
 public class ProductController {
+
+          @Autowired
+          ProductRepository productRepository;
 
           @Autowired
           private ProductService productService;
@@ -84,5 +89,43 @@ public class ProductController {
           public ResponseEntity<String> deleteProductById(@PathVariable String id) {
                     productService.deleteProductById(id);
                     return ResponseEntity.ok("Product deleted successfully");
+          }
+
+          @PostMapping("/update/{id}")
+          public ResponseEntity<String> updateProduct(@PathVariable String id,
+                              @RequestParam("name") String name,
+                              @RequestParam("price") double price,
+                              @RequestParam("colors") List<String> colors,
+                              @RequestParam("description") String description,
+                              @RequestParam("company") String company,
+                              @RequestParam("category") String category,
+                              @RequestParam("featured") boolean featured,
+                              @RequestParam("images") MultipartFile[] images) throws IOException {
+
+                    List<String> imageUrls = new ArrayList<>();
+                    for (MultipartFile image : images) {
+
+                              Map uploadResult = cloudinary.uploader().upload(image.getBytes(),
+                                                  ObjectUtils.emptyMap());
+                              imageUrls.add(uploadResult.get("url").toString());
+                    }
+
+                    Product foundProduct = productRepository.findById(id).get();
+                    if (foundProduct == null) {
+                              return new ResponseEntity<>("product is not available", HttpStatus.NOT_FOUND);
+
+                    }
+
+                    foundProduct.setName(name);
+                    foundProduct.setPrice(price);
+                    foundProduct.setColor(colors);
+                    foundProduct.setDescription(description);
+                    foundProduct.setCompany(company);
+                    foundProduct.setCategory(category);
+                    foundProduct.setFeatured(featured);
+                    foundProduct.setImage(imageUrls);
+
+                    return productService.updateProduct(foundProduct);
+
           }
 }

@@ -1,6 +1,8 @@
 package com.abhishek.API;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,5 +29,10 @@ public class ProductService {
 
           public void deleteProductById(String id) {
                     productRepository.deleteById(id);
+          }
+
+          public ResponseEntity<String> updateProduct(Product product) {
+                    productRepository.save(product);
+                    return new ResponseEntity<>("Product updated successfully", HttpStatus.OK);
           }
 }
